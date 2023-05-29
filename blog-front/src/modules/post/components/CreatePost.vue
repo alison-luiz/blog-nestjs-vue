@@ -86,9 +86,15 @@ export default {
         await this.createPost(this.form);
         this.loading = false;
         this.opened = false;
+        this.resetForm();
       } catch (error) {
         this.loading = false;
       }
+    },
+
+    resetForm() {
+      this.form.title = '';
+      this.form.description = '';
     },
   },
 

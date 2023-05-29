@@ -16,7 +16,15 @@
             ></v-text-field>
           </template>
 
-          <v-btn type="submit" color="primary"> Entrar </v-btn>
+          <v-btn type="submit" color="primary" :disabled="loading">
+            <template v-if="loading">
+              <span>Entrando...</span>
+              <v-progress-circular indeterminate color="white"></v-progress-circular>
+            </template>
+            <template v-else>
+              <span>Entrar</span>
+            </template>
+          </v-btn>
 
           <v-btn text @click="goToRegister"> Criar uma conta </v-btn>
         </v-form>
@@ -37,6 +45,7 @@ export default {
         email: '',
         password: '',
       },
+      loading: false,
     };
   },
 
@@ -48,9 +57,17 @@ export default {
     },
 
     async handleLogin() {
-      await this.login(this.form).then(() => {
-        this.$router.push({ name: 'posts' });
-      });
+      this.loading = true;
+      await this.login(this.form)
+        .then(() => {
+          setTimeout(() => {
+            this.loading = false;
+            this.$router.push({ name: 'posts' });
+          }, 1500);
+        })
+        .catch(() => {
+          this.loading = false;
+        });
     },
   },
 };

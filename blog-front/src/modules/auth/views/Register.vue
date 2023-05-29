@@ -74,11 +74,10 @@ export default {
           setTimeout(() => {
             this.loading = false;
             this.$router.push({ name: 'login' });
-          }, 3000);
+          }, 1500);
         })
-        .catch((error) => {
+        .catch(() => {
           this.loading = false;
-          console.error(error);
         });
     },
   },
