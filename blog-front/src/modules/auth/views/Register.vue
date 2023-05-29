@@ -34,7 +34,6 @@
               <span>Registrar</span>
             </template>
           </v-btn>
-
           <v-btn text @click="goToLogin"> Já tenho uma conta </v-btn>
         </v-form>
       </v-card-text>

@@ -1,32 +1,32 @@
 <template>
-  <v-container class="d-flex justify-center align-center fill-height">
+  <v-container class='d-flex justify-center align-center fill-height'>
     <v-card>
       <v-card-title>
         <h2>Login</h2>
       </v-card-title>
       <v-card-text>
-        <v-form ref="form" @submit.prevent="handleLogin">
+        <v-form ref='form' @submit.prevent='handleLogin'>
           <template>
-            <v-text-field v-model="form.email" label="Email" type="email" required></v-text-field>
+            <v-text-field v-model='form.email' label='Email' type='email' required></v-text-field>
             <v-text-field
-              v-model="form.password"
-              label="Senha"
-              type="password"
+              v-model='form.password'
+              label='Senha'
+              type='password'
               required
             ></v-text-field>
           </template>
 
-          <v-btn type="submit" color="primary" :disabled="loading">
-            <template v-if="loading">
+          <v-btn type='submit' color='primary' :disabled='loading'>
+            <template v-if='loading'>
               <span>Entrando...</span>
-              <v-progress-circular indeterminate color="white"></v-progress-circular>
+              <v-progress-circular indeterminate color='white'></v-progress-circular>
             </template>
             <template v-else>
               <span>Entrar</span>
             </template>
           </v-btn>
 
-          <v-btn text @click="goToRegister"> Criar uma conta </v-btn>
+          <v-btn text @click='goToRegister'> Criar uma conta </v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -59,10 +59,14 @@ export default {
     async handleLogin() {
       this.loading = true;
       await this.login(this.form)
-        .then(() => {
+        .then((response) => {
           setTimeout(() => {
             this.loading = false;
-            this.$router.push({ name: 'posts' });
+            if (response) {
+              if (response.status === 'ok') {
+                this.$router.push({ name: 'posts' });
+              }
+            }
           }, 1500);
         })
         .catch(() => {

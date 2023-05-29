@@ -21,7 +21,7 @@ export default {
 
         if (response.status === 200) {
           commit('setAuth', response.data);
-          return true;
+          return { status: 'ok' };
         }
 
         return false;
