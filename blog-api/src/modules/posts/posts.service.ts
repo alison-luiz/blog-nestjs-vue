@@ -12,10 +12,10 @@ export class PostsService {
     private readonly postRepository: Repository<Post>,
   ) {}
 
-  async create(createPostDto: CreatePostDto, id: string) {
+  async create(createPostDto: CreatePostDto, userId: string) {
     const post = this.postRepository.create({
       ...createPostDto,
-      user_id: id,
+      user: { id: userId },
     });
 
     return await this.postRepository.save(post);

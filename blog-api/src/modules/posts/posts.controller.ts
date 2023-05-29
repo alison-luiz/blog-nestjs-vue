@@ -11,6 +11,7 @@ import {
   HttpCode,
   HttpStatus,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -44,7 +45,15 @@ export class PostsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @Req() req: AuthRequest) {
+    const post = await this.postsService.findOne(id);
+
+    if (post.user.id !== req.user.id) {
+      throw new UnauthorizedException(
+        'You are not authorized to delete this post',
+      );
+    }
+
     return this.postsService.remove(id);
   }
 }
