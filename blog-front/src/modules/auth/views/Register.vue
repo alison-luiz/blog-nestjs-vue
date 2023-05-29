@@ -25,8 +25,14 @@
             <v-text-field v-model="form.document" label="Documento (CPF)" required></v-text-field>
           </template>
 
-          <v-btn type="submit" color="primary">
-            Registrar
+          <v-btn type="submit" color="primary" :disabled="loading">
+            <template v-if="loading">
+              <span>Registrando...</span>
+              <v-progress-circular indeterminate color="white"></v-progress-circular>
+            </template>
+            <template v-else>
+              <span>Registrar</span>
+            </template>
           </v-btn>
 
           <v-btn text @click="goToLogin"> Já tenho uma conta </v-btn>
@@ -52,6 +58,7 @@ export default {
         date_of_birth: '',
         document: '',
       },
+      loading: false,
     };
   },
 
@@ -60,9 +67,19 @@ export default {
       this.$router.push({ name: 'login' });
     },
     async register() {
-      await AuthService.register(this.form).then(() => {
-        this.goToLogin();
-      });
+      this.loading = true;
+
+      await AuthService.register(this.form)
+        .then(() => {
+          setTimeout(() => {
+            this.loading = false;
+            this.$router.push({ name: 'login' });
+          }, 3000);
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.error(error);
+        });
     },
   },
 };
